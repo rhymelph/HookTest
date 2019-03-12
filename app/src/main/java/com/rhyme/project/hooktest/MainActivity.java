@@ -3,6 +3,7 @@ package com.rhyme.project.hooktest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,6 +37,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
 
+        //Hook 粘贴版
+        try {
+            HookHelper.hookClipboardService(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Notification.Builder createNotification(String title, String content,int notification_icon, Class<?> intent_class) {
@@ -58,8 +65,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         getTv().setText("My name is ben");
 
-        NotificationManager manager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        manager.notify(1,createNotification("标题","内容",R.mipmap.ic_launcher,MainActivity.class).build());
+//        NotificationManager manager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        manager.notify(1,createNotification("标题","内容",R.mipmap.ic_launcher,MainActivity.class).build());
+
+        ClipboardManager manager= (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        manager.setPrimaryClip(ClipData.newPlainText(null,"Hello World"));
     }
     private TextView getTv(){
         return findViewById(R.id.textView);
